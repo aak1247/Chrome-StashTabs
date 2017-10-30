@@ -98,7 +98,7 @@ function saveBackgroundColor(url, color) {
 }
 
 
-function getTabsFromBrowser() {
+function stashTabsFromBrowser() {
   var listItem = {};
   listItem.date = new Date();
   listItem.tabs = [];
@@ -108,25 +108,29 @@ function getTabsFromBrowser() {
 
       for (var i = 0; i < tabs.length ; i++){
         tab = tabs[i];
-        let tabItem = {};
-        tabItem.title = tab.title;
-        tabItem.url = tab.url;
+        listItem.tabs.push({
+          "title": tab.title,
+          "url": tab.url
+        });
         // alert(tabItem.title + tabItem.url);
         if(i != tabs.length-1 )chrome.tabs.remove(tab.id);
         else chrome.tabs.update({"url": "chrome://newtab"});
         // tabItem.screenshot = null//保存截图
-        listItem.tabs.push(tabItem);
+        console.log("in browser"+ i +JSON.stringify(listItem) + "\n");
       }
+      console.log(JSON.stringify(listItem));
+      saveTabs(listItem);
     });
   });
-  return listItem;
 }
 
 function getTabsFromStorage() {
-  var savedList;
-  chrome.storage.sync.get(storageName, (data)=>savedList = data);//获取已保存的数组
-  console.log(JSON.stringify(savedList) + "in getTabsFromStorage1");
-  // savedList = window.localStorage[storageName];
+  var savedList = null;
+  // chrome.storage.sync.get(storageName, (data)=>savedList = data);//获取已保存的数组
+  // console.log(JSON.stringify(savedList) + "in getTabsFromStorage1");
+  var stringList = window.localStorage[storageName];
+  // console.log(stringList);
+  if( stringList != undefined )savedList = JSON.parse(window.localStorage[storageName]);
   if (savedList === null || savedList === "" || savedList === undefined ) savedList = [];
   console.log(JSON.stringify(savedList) + "in getTabsFromStorage2");
   return savedList;
@@ -137,19 +141,15 @@ function saveTabs(tabs) {
   var savedList = getTabsFromStorage();
   savedList.push(tabs);
   var storedData={};
+
   storedData[storageName] = savedList;
 
-  chrome.storage.sync.set(storedData, ()=>console.log("tabs saved"));
-
-  window.localStorage.setItem(storageName, savedList);
-  // var test = window.localStorage.getItem(storageName);
+  // chrome.storage.sync.set(storedData, ()=>console.log("tabs saved"));
+  console.log(JSON.stringify(savedList));
+  window.localStorage.setItem(storageName, JSON.stringify(savedList));
+  var test = window.localStorage.getItem(storageName);
   var test = chrome.storage.sync.get(storageName, (data)=>savedList = data);
   console.log(test);
-}
-
-function stashEventHandler() {
-  var listItem = getTabsFromBrowser();
-  saveTabs(listItem);
 }
 
 function restoreTabs(tabs) {
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ensure the background color is changed and saved when the dropdown
     // selection changes.
     stashButton.addEventListener('click', () => {
-      stashEventHandler();
+      stashTabsFromBrowser();
     });
 
     var cancelButton = document.getElementById('cancel');
