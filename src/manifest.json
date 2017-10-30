@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "Stash Tabs",
+  "description": "This extension is to help users stash their opened tabs in current window and restore them when needed",
+  "version": "0.1",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "稍后再看"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "tabCapture"
+  ],
+  // "chrome_url_overrides": {
+  //   "newtab": "tabs.html"
+  // },
+  "background": {
+        "scripts": ["js/background.js"]
+    }
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+      body {
+        margin: 10px;
+        white-space: nowrap;
+        /* width: 500px; */
+      }
+
+      h1 {
+        font-size: 15px;
+        margin: 1em;
+      }
+
+      #container {
+        align-items: center;
+        /* display: flex; */
+        justify-content: space-between;
+      }
+      #container>p {
+        width: 100%;
+      }
+      #container * {
+        margin: 1em;
+      }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+    -->
+    <script src="popup.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <h1>稍后阅览</h1>
+    <div id="container">
+      <p>是否保存网页到本地?</p>
+      <button type="button" class="btn btn-warning" id="slash">Stash</button>
+      <button type="button" class="btn btn-info" id="restore">restore</button>
+      <button type="button" class="btn btn-default" id="cancel">Cancel</button>
+    </div>
+    <!-- <div>
+      <h2>测试测试</h2>
+    </div> -->
+  </body>
+</html>
